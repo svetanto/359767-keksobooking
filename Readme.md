@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
 * Студент: [Светозар Антонов](https://up.htmlacademy.ru/javascript/11/user/359767).
-* Наставник: `Неизвестно`.
+* Наставник: [Евгений Карпов](https://htmlacademy.ru/profile/id70583).
 
 ---
 
