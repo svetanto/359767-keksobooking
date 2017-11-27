@@ -26,9 +26,32 @@ var FEATURES = generateFeatures(numberOfObjects);
 
 var objects = generateOfferedObjects(numberOfObjects);
 
+var mapCardButtonTemplate = document.querySelector('template').content;
+var mapButtonTemplate = mapCardButtonTemplate.querySelector('.map__pin');
+var pinsOverlay = document.querySelector('.map__pins');
+
+drawMapPins(pinsOverlay);
+
+function renderMapPin(pin) {
+  var mapPin = mapButtonTemplate.cloneNode(true);
+  var mapPinWidth = 40;
+  var mapPinHeight = 44;
+  mapPin.style = 'left: ' + (pin.location.x - mapPinWidth / 2) + 'px; top: ' + (pin.location.y - mapPinHeight) + 'px';
+  mapPin.querySelector('img').src = pin.author.avatar;
+  return mapPin;
+}
+
+function drawMapPins(pins) {
+  var fragment = document.createDocumentFragment();
+  for (var i = 0; i < objects.length; i++) {
+    fragment.appendChild(renderMapPin(objects[i]));
+  }
+  pins.appendChild(fragment);
+}
 
 // for (i = 0; i < 8; i++) {
-  console.log(objects);
+// console.log(mapCardButtonTemplate, mapButtonTemplate, mapButtonImageTemplate);
+console.log(pinsOverlay);
 // }
 
 function shuffleArray(array) {
