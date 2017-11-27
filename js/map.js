@@ -28,9 +28,12 @@ var objects = generateOfferedObjects(numberOfObjects);
 
 var mapCardButtonTemplate = document.querySelector('template').content;
 var mapButtonTemplate = mapCardButtonTemplate.querySelector('.map__pin');
+var mapCardTemplate = mapCardButtonTemplate.querySelector('.map__card');
 var pinsOverlay = document.querySelector('.map__pins');
+var cardOverlay = document.querySelector('.map');
 
 drawMapPins(pinsOverlay);
+drawMapCard(cardOverlay, objects[0]);
 
 function renderMapPin(pin) {
   var mapPin = mapButtonTemplate.cloneNode(true);
@@ -49,10 +52,38 @@ function drawMapPins(pins) {
   pins.appendChild(fragment);
 }
 
-// for (i = 0; i < 8; i++) {
-// console.log(mapCardButtonTemplate, mapButtonTemplate, mapButtonImageTemplate);
-console.log(pinsOverlay);
-// }
+function renderMapCard(data) {
+  var mapCard = mapCardTemplate.cloneNode(true);
+  mapCard.querySelector('h3').textContent = data.offer.title;
+  mapCard.querySelector('small').textContent = data.offer.address;
+  mapCard.querySelector('.popup__price').textContent = data.offer.price + ' ¥/ночь';
+  // Линтер ругается на вложенный тернарный оператор - что - ифами что ли делать эту проверку??
+  // Или какой-то вспомогательный массив создавать? Не понимаю - почему бы сразу в массив не записать правильные строки...
+  mapCard.querySelector('h4').textContent = (data.offer.type === 'flat') ? 'Квартира' : (data.offer.type === 'house') ? 'Дом' : 'Бунгало';
+  mapCard.querySelector('p:nth-of-type(3)').textContent = data.offer.rooms + ' комнаты для ' + data.offer.guests + ' гостей';
+  mapCard.querySelector('p:nth-of-type(4)').textContent = 'Заезд после ' + data.offer.checkin + ', выезд до ' + data.offer.checkout;
+
+  var popupFeatures = mapCard.querySelector('.popup__features');
+  var blocks = popupFeatures.querySelectorAll('li');
+  for (var i = 0; i < popupFeatures.children.length; i++) {
+    if (data.offer.features[i]) {
+      blocks[i].classList = 'feature feature--' + data.offer.features[i];
+    } else {
+      popupFeatures.removeChild(blocks[i]);
+    }
+  }
+
+  mapCard.querySelector('p:nth-of-type(5)').textContent = data.offer.description;
+  mapCard.querySelector('.popup__avatar').src = data.author.avatar;
+  return mapCard;
+}
+
+function drawMapCard(card, data) {
+  var fragment = document.createDocumentFragment();
+  fragment.appendChild(renderMapCard(data));
+  card.appendChild(fragment);
+  card.insertBefore(fragment, card.querySelector('.map__filters-container'));
+}
 
 function shuffleArray(array) {
   for (var i = array.length - 1; i; i--) {
@@ -106,17 +137,15 @@ function generatePrices(number) {
 }
 
 function generateFeatures(number) {
-  var stringTemp = '';
-  var arrayTemp = [];
   var array = [];
   for (var i = 0; i < number; i++) {
-    stringTemp = '';
+    var arrayTemp = [];
     var featuresNumber = generateRandomInteger(1, FEATURES_VALUES.length);
-    arrayTemp = shuffleArray(FEATURES_VALUES);
+    var featuresValuesShuffled = shuffleArray(FEATURES_VALUES);
     for (var j = 0; j < featuresNumber; j++) {
-      stringTemp += (arrayTemp[j] + ' ');
+      arrayTemp.push(featuresValuesShuffled[j]);
     }
-    array[i] = stringTemp;
+    array[i] = arrayTemp;
   }
   return array;
 }
