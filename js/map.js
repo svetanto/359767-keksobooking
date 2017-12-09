@@ -6,6 +6,7 @@
   var ESC_KEYCODE = 27;
 
   var mapPinMain = document.querySelector('.map__pin--main');
+  var previousPinNumber = -1;
 
   mapPinMain.addEventListener('mouseup', pinActivationHandler);
   mapPinMain.addEventListener('keydown', pinPressEnterHandler);
@@ -26,47 +27,13 @@
     map.classList.remove('map--faded');
     var numberOfObjects = 8;
     var inputObject = generateInput(numberOfObjects);
-    var arrayOfOfferedObjects = generateOfferedObjects(inputObject, numberOfObjects);
-    drawMapPins(arrayOfOfferedObjects);
+    drawMapPins(generateOfferedObjects(inputObject, numberOfObjects));
     noticeForm.classList.remove('notice__form--disabled');
     for (var i = 0; i < fieldsets.length; i++) {
       fieldsets[i].removeAttribute('disabled');
     }
-    var mapPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
-
-    function addPinClickListener(pin) {
-      pin.addEventListener('click', function () {
-        // console.log(pin);
-        deactivatePins();
-        pin.classList.add('map__pin--active');
-        removeMapCard();
-        drawMapCard(arrayOfOfferedObjects[pin.getAttribute('data')]);
-        var cardClose = map.querySelector('.popup__close');
-        cardClose.addEventListener('click', function () {
-          deactivatePins();
-          removeMapCard();
-        });
-      });
-    }
-
-    function deactivatePins() {
-      for (var j = 0; j < mapPins.length; j++) {
-        mapPins[j].classList.toggle('map__pin--active', false);
-      }
-    }
-
-    window.addEventListener('keydown', function (evt) {
-      if (evt.keyCode === ESC_KEYCODE) {
-        deactivatePins();
-        removeMapCard();
-      }
-    });
-
-    for (i = 0; i < mapPins.length; i++) {
-      var currentPin = mapPins[i];
-      addPinClickListener(currentPin);
-    }
   }
+
 
   // Функция формирования входных данных (эмуляция внешнего ввода, потом будет заменена на внешний ввод)
   function generateInput(numberOfInputs) {
@@ -212,29 +179,63 @@
     var pinsOverlay = document.querySelector('.map__pins');
     var fragment = document.createDocumentFragment();
     for (var i = 0; i < objects.length; i++) {
-      fragment.appendChild(renderMapPin(objects[i]));
+      fragment.appendChild(renderMapPin(objects[i], i));
     }
     pinsOverlay.appendChild(fragment);
 
-    function renderMapPin(pin) {
+    function renderMapPin(pin, index) {
       var mapPin = mapPinTemplate.cloneNode(true);
       var mapPinWidth = 40;
       var mapPinHeight = 44;
       mapPin.style = 'left: ' + (pin.location.x - mapPinWidth / 2) + 'px; top: ' + (pin.location.y - mapPinHeight) + 'px';
       mapPin.querySelector('img').src = pin.author.avatar;
-      mapPin.setAttribute('data', i);
+      mapPin.addEventListener('click', function () {
+        pinClickHandler(index);
+      });
+
+      function pinClickHandler(pinNumber) {
+        var mapPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
+        if (previousPinNumber !== -1) {
+          mapPins[previousPinNumber].classList.remove('map__pin--active');
+        }
+        previousPinNumber = pinNumber;
+        mapPins[pinNumber].classList.add('map__pin--active');
+        removeMapCard();
+        drawMapCard(objects[pinNumber], mapPins[pinNumber]);
+      }
       return mapPin;
     }
   }
 
+
   // Функция отрисовки карточки объекта
-  function drawMapCard(objects) {
+  function drawMapCard(objects, pin) {
     var mapCardPinTemplate = document.querySelector('template').content;
     var mapCardTemplate = mapCardPinTemplate.querySelector('.map__card');
     var cardOverlay = document.querySelector('.map');
     var fragment = document.createDocumentFragment();
     fragment.appendChild(renderMapCard(objects));
     cardOverlay.insertBefore(fragment, cardOverlay.querySelector('.map__filters-container'));
+
+    var cardClose = document.querySelector('.popup__close');
+    cardClose.addEventListener('click', function () {
+      closeCard(pin);
+    });
+
+    window.addEventListener('keydown', cardPressEscHandler);
+
+    function cardPressEscHandler(evt) {
+      if (evt.keyCode === ESC_KEYCODE) {
+        closeCard(pin);
+      }
+    }
+
+    function closeCard(currentPin) {
+      removeMapCard();
+      currentPin.classList.remove('map__pin--active');
+      previousPinNumber = -1;
+      window.removeEventListener('keydown', cardPressEscHandler);
+    }
 
     function renderMapCard(data) {
       var mapCard = mapCardTemplate.cloneNode(true);
