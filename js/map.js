@@ -2,12 +2,42 @@
 
 (function () {
 
-  var numberOfObjects = 8;
+  var ENTER_KEYCODE = 13;
+  var ESC_KEYCODE = 27;
 
-  var inputObject = generateInput(numberOfObjects);
-  var arrayOfOfferedObjects = generateOfferedObjects(inputObject, numberOfObjects);
-  drawMapPins(arrayOfOfferedObjects);
-  drawMapCard(arrayOfOfferedObjects[0]);
+  var map = document.querySelector('.map');
+  var mapPinMain = map.querySelector('.map__pin--main');
+  var mapCardPinTemplate = document.querySelector('template').content;
+  var mapPinTemplate = mapCardPinTemplate.querySelector('.map__pin');
+  var mapCardTemplate = mapCardPinTemplate.querySelector('.map__card');
+
+  var previousPin = null
+
+  mapPinMain.addEventListener('mouseup', pinActivationHandler);
+  mapPinMain.addEventListener('keydown', pinPressEnterHandler);
+
+  function pinPressEnterHandler(evt) {
+    if (evt.keyCode === ENTER_KEYCODE) {
+      pinActivationHandler();
+    }
+  }
+
+  function pinActivationHandler() {
+    mapPinMain.removeEventListener('mouseup', pinActivationHandler);
+    mapPinMain.removeEventListener('keydown', pinPressEnterHandler);
+    var noticeForm = document.querySelector('.notice__form');
+    var fieldsets = noticeForm.querySelectorAll('fieldset');
+
+    map.classList.remove('map--faded');
+    var numberOfObjects = 8;
+    var inputObject = generateInput(numberOfObjects);
+    drawMapPins(generateOfferedObjects(inputObject, numberOfObjects));
+    noticeForm.classList.remove('notice__form--disabled');
+    for (var i = 0; i < fieldsets.length; i++) {
+      fieldsets[i].removeAttribute('disabled');
+    }
+  }
+
 
   // Функция формирования входных данных (эмуляция внешнего ввода, потом будет заменена на внешний ввод)
   function generateInput(numberOfInputs) {
@@ -52,15 +82,10 @@
     // Специфичные функции формирования входных данных ===========================
     function generateAvatarsURLs(prefix, suffix, number) {
       var array = [];
-      var avatarURLs = [];
       for (var i = 1; i <= number; i++) {
-        array.push((i < 10) ? '0' + i : i);
+        array.push(prefix + ((i < 10) ? '0' + i : i) + suffix);
       }
-      array = shuffleArray(array);
-      for (i = 0; i < number; i++) {
-        avatarURLs.push(prefix + array[i] + suffix);
-      }
-      return avatarURLs;
+      return shuffleArray(array);
     }
 
     function generateAddresses(x, y) {
@@ -79,9 +104,12 @@
       return array;
       function convertTypeToRussian(type) {
         switch (type) {
-          case 'flat': return 'Квартира';
-          case 'house': return 'Дом';
-          default: return 'Бунгало';
+          case 'flat':
+            return 'Квартира';
+          case 'house':
+            return 'Дом';
+          default:
+            return 'Бунгало';
         }
       }
     }
@@ -92,6 +120,7 @@
         features.push(generateFeaturesSet(arrayOfPossibleFeatures));
       }
       return features;
+
       function generateFeaturesSet(arr) {
         var featuresSet = [];
         var featuresCount = generateRandomInteger(1, arr.length);
@@ -149,34 +178,69 @@
 
   // Функция отрисовки меток на карте
   function drawMapPins(objects) {
-    var mapCardPinTemplate = document.querySelector('template').content;
-    var mapPinTemplate = mapCardPinTemplate.querySelector('.map__pin');
     var pinsOverlay = document.querySelector('.map__pins');
     var fragment = document.createDocumentFragment();
     for (var i = 0; i < objects.length; i++) {
-      fragment.appendChild(renderMapPin(objects[i]));
+      fragment.appendChild(renderMapPin(objects[i], i));
     }
     pinsOverlay.appendChild(fragment);
 
-    function renderMapPin(pin) {
+    function renderMapPin(object, index) {
       var mapPin = mapPinTemplate.cloneNode(true);
       var mapPinWidth = 40;
       var mapPinHeight = 44;
-      mapPin.style = 'left: ' + (pin.location.x - mapPinWidth / 2) + 'px; top: ' + (pin.location.y - mapPinHeight) + 'px';
-      mapPin.querySelector('img').src = pin.author.avatar;
+      mapPin.style = 'left: ' + (object.location.x - mapPinWidth / 2) + 'px; top: ' + (object.location.y - mapPinHeight) + 'px';
+      mapPin.querySelector('img').src = object.author.avatar;
+      mapPin.addEventListener('click', function () {
+        pinClickHandler(mapPin, index);
+      });
+
+      function pinClickHandler(pin, pinNumber) {
+        if (previousPin) {
+          previousPin.classList.remove('map__pin--active');
+        }
+        previousPin = pin;
+        pin.classList.add('map__pin--active');
+        drawMapCard(objects[pinNumber], pin);
+      }
       return mapPin;
     }
   }
 
+
   // Функция отрисовки карточки объекта
-  function drawMapCard(objects) {
-    var mapCardPinTemplate = document.querySelector('template').content;
-    var mapCardTemplate = mapCardPinTemplate.querySelector('.map__card');
-    var cardOverlay = document.querySelector('.map');
+  function drawMapCard(object, pin) {
+    removeCard();
     var fragment = document.createDocumentFragment();
-    fragment.appendChild(renderMapCard(objects));
-    cardOverlay.appendChild(fragment);
-    cardOverlay.insertBefore(fragment, cardOverlay.querySelector('.map__filters-container'));
+    fragment.appendChild(renderMapCard(object));
+    map.insertBefore(fragment, map.querySelector('.map__filters-container'));
+
+    var cardClose = document.querySelector('.popup__close');
+    cardClose.addEventListener('click', function () {
+      closeCard(pin);
+    });
+
+    window.addEventListener('keydown', cardPressEscHandler);
+
+    function cardPressEscHandler(evt) {
+      if (evt.keyCode === ESC_KEYCODE) {
+        closeCard();
+      }
+    }
+
+    function closeCard() {
+      removeCard();
+      pin.classList.remove('map__pin--active');
+      previousPin = null;
+      window.removeEventListener('keydown', cardPressEscHandler);
+    }
+
+    function removeCard() {
+      var card = map.querySelector('.map__card');
+      if (card) {
+        map.removeChild(card);
+      }
+    }
 
     function renderMapCard(data) {
       var mapCard = mapCardTemplate.cloneNode(true);
