@@ -11,7 +11,7 @@
   var mapPinTemplate = mapCardPinTemplate.querySelector('.map__pin');
   var mapCardTemplate = mapCardPinTemplate.querySelector('.map__card');
 
-  var previousPin = null
+  var previousPin = null;
 
   mapPinMain.addEventListener('mouseup', pinActivationHandler);
   mapPinMain.addEventListener('keydown', pinPressEnterHandler);
@@ -246,7 +246,7 @@
       var mapCard = mapCardTemplate.cloneNode(true);
       mapCard.querySelector('h3').textContent = data.offer.title;
       mapCard.querySelector('small').textContent = data.offer.address;
-      mapCard.querySelector('.popup__price').textContent = data.offer.price + ' ₽/ночь';
+      mapCard.querySelector('.popup__price').textContent = data.offer.price + ' ' + String.fromCharCode(0x20bd) + '/ночь';
       mapCard.querySelector('h4').textContent = data.offer.type;
       mapCard.querySelector('p:nth-of-type(3)').textContent = data.offer.rooms + ' комнаты для ' + data.offer.guests + ' гостей';
       mapCard.querySelector('p:nth-of-type(4)').textContent = 'Заезд после ' + data.offer.checkin + ', выезд до ' + data.offer.checkout;
