@@ -57,7 +57,7 @@
 
   function setGuestsNumberOptions(evt) {
     for (var j = 0; j <= maxNumberOfGuests; j++) {
-      guestsNumberOptions[j].disabled = ROOMS_SYNC_CAPACITY[evt.target.value][j] ? false : true;
+      guestsNumberOptions[j].disabled = !ROOMS_SYNC_CAPACITY[evt.target.value][j];
     }
     capacity.value = (roomNumber.value === '100') ? 0 : roomNumber.value;
   }
