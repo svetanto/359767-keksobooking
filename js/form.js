@@ -51,8 +51,6 @@
     guestsNumberOptions.push(capacity.querySelector('option[value="' + (3 - i) + '"]'));
   }
 
-  // console.log(guestsNumberOptions[j]);
-
   roomNumber.addEventListener('input', setGuestsNumberOptions);
 
   function setGuestsNumberOptions(evt) {
