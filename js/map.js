@@ -4,29 +4,83 @@
 
   var map = document.querySelector('.map');
   var mapPinMain = map.querySelector('.map__pin--main');
-
-  mapPinMain.addEventListener('mouseup', pinActivationHandler);
+/*
   mapPinMain.addEventListener('keydown', pinPressEnterHandler);
 
   function pinPressEnterHandler(evt) {
     window.isEnterPressed(evt, pinActivationHandler);
   }
+*/
+  mapPinMain.addEventListener('mousedown', function (evt) {
+    evt.preventDefault();
+    var startCoords = {
+      x: evt.clientX,
+      y: evt.clientY
+    };
 
-  function pinActivationHandler() {
-    mapPinMain.removeEventListener('mouseup', pinActivationHandler);
-    mapPinMain.removeEventListener('keydown', pinPressEnterHandler);
-    var noticeForm = document.querySelector('.notice__form');
-    var fieldsets = noticeForm.querySelectorAll('fieldset');
+    var coordX;
+    var coordY;
 
-    map.classList.remove('map--faded');
-    var numberOfObjects = 8;
-    var inputObject = window.generateInput(numberOfObjects);
-    window.drawMapPins(generateOfferedObjects(inputObject, numberOfObjects));
-    noticeForm.classList.remove('notice__form--disabled');
-    for (var i = 0; i < fieldsets.length; i++) {
-      fieldsets[i].removeAttribute('disabled');
+    function onMouseMove(moveEvt) {
+      moveEvt.preventDefault();
+
+      coordX = moveEvt.clientX;
+      coordY = moveEvt.clientY;
+
+      if (coordY < 100) {
+        coordY = 100;
+      }
+
+      if (coordY > 500) {
+        coordY = 500;
+      }
+
+      console.log(coordX);
+      console.log(coordY);
+      var shift = {
+        x: startCoords.x - coordX,
+        y: startCoords.y - coordY
+      };
+
+      startCoords = {
+        x: coordX,
+        y: coordY
+      };
+
+      mapPinMain.style.top = (mapPinMain.offsetTop - shift.y) + 'px';
+      mapPinMain.style.left = (mapPinMain.offsetLeft - shift.x) + 'px';
     }
-  }
+
+    function onMouseUp(upEvt) {
+      upEvt.preventDefault();
+      document.removeEventListener('mousemove', onMouseMove);
+      pinActivationHandler();
+    }
+
+    function pinActivationHandler() {
+      mapPinMain.removeEventListener('mouseup', onMouseUp);
+      // mapPinMain.removeEventListener('keydown', pinPressEnterHandler);
+      var noticeForm = document.querySelector('.notice__form');
+      var fieldsets = noticeForm.querySelectorAll('fieldset');
+
+      map.classList.remove('map--faded');
+      var numberOfObjects = 8;
+      var inputObject = window.generateInput(numberOfObjects);
+      window.drawMapPins(generateOfferedObjects(inputObject, numberOfObjects));
+      noticeForm.classList.remove('notice__form--disabled');
+      for (var i = 0; i < fieldsets.length; i++) {
+        fieldsets[i].removeAttribute('disabled');
+      }
+      var addressInput = noticeForm.querySelectorAll('#address');
+      addressInput.value = 'x: ' + coordX + ', y: ' + coordY;
+      console.log(addressInput);
+      console.log(addressInput.value);
+    }
+
+    document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('mouseup', onMouseUp);
+  });
+
 
   // Функция формирования массива из входных данных
   function generateOfferedObjects(input, number) {
