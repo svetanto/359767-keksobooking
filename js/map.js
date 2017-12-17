@@ -4,39 +4,48 @@
 
   var map = document.querySelector('.map');
   var mapPinMain = map.querySelector('.map__pin--main');
-/*
-  mapPinMain.addEventListener('keydown', pinPressEnterHandler);
 
-  function pinPressEnterHandler(evt) {
-    window.isEnterPressed(evt, pinActivationHandler);
-  }
-*/
-  mapPinMain.addEventListener('mousedown', function (evt) {
-    evt.preventDefault();
+  var MAIN_PIN = {
+    width: 62,
+    height: 84
+  };
+
+  var COORD_Y = {
+    min: 100 - MAIN_PIN.height,
+    max: 500 - MAIN_PIN.height
+  };
+
+  mapPinMain.addEventListener('mousedown', mainPinActivationHandler);
+
+  function mainPinActivationHandler(downEvt) {
+    downEvt.preventDefault();
+    mapPinMain.removeEventListener('mousedown', mainPinActivationHandler);
+    document.addEventListener('mousemove', mouseMoveHandler);
+
     var startCoords = {
-      x: evt.clientX,
-      y: evt.clientY
+      x: downEvt.clientX,
+      y: downEvt.clientY
     };
 
     var coordX;
     var coordY;
 
-    function onMouseMove(moveEvt) {
+    function mouseMoveHandler(moveEvt) {
       moveEvt.preventDefault();
+
+      mapPinMain.addEventListener('mouseup', mouseUpHandler);
 
       coordX = moveEvt.clientX;
       coordY = moveEvt.clientY;
 
-      if (coordY < 100) {
-        coordY = 100;
+      if (coordY < COORD_Y.min) {
+        coordY = COORD_Y.min;
       }
 
-      if (coordY > 500) {
-        coordY = 500;
+      if (coordY > COORD_Y.max) {
+        coordY = COORD_Y.max;
       }
 
-      console.log(coordX);
-      console.log(coordY);
       var shift = {
         x: startCoords.x - coordX,
         y: startCoords.y - coordY
@@ -51,15 +60,11 @@
       mapPinMain.style.left = (mapPinMain.offsetLeft - shift.x) + 'px';
     }
 
-    function onMouseUp(upEvt) {
+    function mouseUpHandler(upEvt) {
       upEvt.preventDefault();
-      document.removeEventListener('mousemove', onMouseMove);
-      pinActivationHandler();
-    }
+      document.removeEventListener('mousemove', mouseMoveHandler);
+      mapPinMain.removeEventListener('mouseup', mouseUpHandler);
 
-    function pinActivationHandler() {
-      mapPinMain.removeEventListener('mouseup', onMouseUp);
-      // mapPinMain.removeEventListener('keydown', pinPressEnterHandler);
       var noticeForm = document.querySelector('.notice__form');
       var fieldsets = noticeForm.querySelectorAll('fieldset');
 
@@ -71,16 +76,10 @@
       for (var i = 0; i < fieldsets.length; i++) {
         fieldsets[i].removeAttribute('disabled');
       }
-      var addressInput = noticeForm.querySelectorAll('#address');
-      addressInput.value = 'x: ' + coordX + ', y: ' + coordY;
-      console.log(addressInput);
-      console.log(addressInput.value);
+      var addressInput = noticeForm.querySelector('#address');
+      addressInput.value = 'x: ' + (coordX + MAIN_PIN.width / 2) + ', y: ' + (coordY + MAIN_PIN.height);
     }
-
-    document.addEventListener('mousemove', onMouseMove);
-    document.addEventListener('mouseup', onMouseUp);
-  });
-
+  }
 
   // Функция формирования массива из входных данных
   function generateOfferedObjects(input, number) {
