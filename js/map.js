@@ -17,12 +17,21 @@
     maxY: 600 - MAIN_PIN_SIZE.height - window.scrollY
   };
 
-  mapPinMain.addEventListener('mousedown', mainPinActivationHandler);
+  mapPinMain.addEventListener('mousedown', mapActivationHandler);
+
+  function mapActivationHandler(downEvent) {
+    downEvent.preventDefault();
+    map.classList.remove('map--faded');
+    var numberOfObjects = 8;
+    var inputObject = window.generateInput(numberOfObjects);
+    window.drawMapPins(generateOfferedObjects(inputObject, numberOfObjects));
+    mapPinMain.removeEventListener('mousedown', mapActivationHandler);
+    mainPinActivationHandler(downEvent);
+  }
 
   function mainPinActivationHandler(downEvt) {
     downEvt.preventDefault();
-    map.classList.remove('map--faded');
-    mapPinMain.removeEventListener('mousedown', mainPinActivationHandler);
+    mapPinMain.addEventListener('mousedown', mainPinActivationHandler);
     document.addEventListener('mousemove', mouseMoveHandler);
 
     var startCoords = {
@@ -79,9 +88,7 @@
       var noticeForm = document.querySelector('.notice__form');
       var fieldsets = noticeForm.querySelectorAll('fieldset');
 
-      var numberOfObjects = 8;
-      var inputObject = window.generateInput(numberOfObjects);
-      window.drawMapPins(generateOfferedObjects(inputObject, numberOfObjects));
+
       noticeForm.classList.remove('notice__form--disabled');
       for (var i = 0; i < fieldsets.length; i++) {
         fieldsets[i].removeAttribute('disabled');
