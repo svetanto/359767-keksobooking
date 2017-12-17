@@ -5,20 +5,26 @@
   var map = document.querySelector('.map');
   var mapPinMain = map.querySelector('.map__pin--main');
 
-  var MAIN_PIN = {
+  var MAIN_PIN_SIZE = {
     width: 62,
     height: 84
   };
 
-  var COORD_Y = {
-    min: 100 - MAIN_PIN.height,
-    max: 500 - MAIN_PIN.height
+  var MAP_WIDTH = 1200;
+
+  var BOUNDS = {
+    minX: map.offsetLeft + MAIN_PIN_SIZE.width / 2,
+    maxX: map.offsetLeft + MAP_WIDTH - MAIN_PIN_SIZE.width / 2,
+    minY: 150 - MAIN_PIN_SIZE.height,
+    maxY: 600 - MAIN_PIN_SIZE.height - window.scrollY
   };
 
   mapPinMain.addEventListener('mousedown', mainPinActivationHandler);
 
   function mainPinActivationHandler(downEvt) {
+    console.log(BOUNDS.maxY);
     downEvt.preventDefault();
+    map.classList.remove('map--faded');
     mapPinMain.removeEventListener('mousedown', mainPinActivationHandler);
     document.addEventListener('mousemove', mouseMoveHandler);
 
@@ -33,17 +39,25 @@
     function mouseMoveHandler(moveEvt) {
       moveEvt.preventDefault();
 
-      mapPinMain.addEventListener('mouseup', mouseUpHandler);
+      document.addEventListener('mouseup', mouseUpHandler);
 
       coordX = moveEvt.clientX;
       coordY = moveEvt.clientY;
 
-      if (coordY < COORD_Y.min) {
-        coordY = COORD_Y.min;
+      if (coordX < BOUNDS.minX) {
+        coordX = BOUNDS.minX;
       }
 
-      if (coordY > COORD_Y.max) {
-        coordY = COORD_Y.max;
+      if (coordX > BOUNDS.maxX) {
+        coordX = BOUNDS.maxX;
+      }
+
+      if (coordY < BOUNDS.minY) {
+        coordY = BOUNDS.minY;
+      }
+
+      if (coordY > BOUNDS.maxY) {
+        coordY = BOUNDS.maxY;
       }
 
       var shift = {
@@ -63,12 +77,11 @@
     function mouseUpHandler(upEvt) {
       upEvt.preventDefault();
       document.removeEventListener('mousemove', mouseMoveHandler);
-      mapPinMain.removeEventListener('mouseup', mouseUpHandler);
+      document.removeEventListener('mouseup', mouseUpHandler);
 
       var noticeForm = document.querySelector('.notice__form');
       var fieldsets = noticeForm.querySelectorAll('fieldset');
 
-      map.classList.remove('map--faded');
       var numberOfObjects = 8;
       var inputObject = window.generateInput(numberOfObjects);
       window.drawMapPins(generateOfferedObjects(inputObject, numberOfObjects));
@@ -77,7 +90,7 @@
         fieldsets[i].removeAttribute('disabled');
       }
       var addressInput = noticeForm.querySelector('#address');
-      addressInput.value = 'x: ' + (coordX + MAIN_PIN.width / 2) + ', y: ' + (coordY + MAIN_PIN.height);
+      addressInput.value = 'x: ' + (coordX + MAIN_PIN_SIZE.width / 2 - map.offsetLeft) + ', y: ' + (coordY + MAIN_PIN_SIZE.height);
     }
   }
 
