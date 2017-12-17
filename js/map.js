@@ -10,11 +10,9 @@
     height: 84
   };
 
-  var MAP_WIDTH = 1200;
-
   var BOUNDS = {
     minX: map.offsetLeft + MAIN_PIN_SIZE.width / 2,
-    maxX: map.offsetLeft + MAP_WIDTH - MAIN_PIN_SIZE.width / 2,
+    maxX: map.offsetLeft + map.clientWidth - MAIN_PIN_SIZE.width / 2,
     minY: 150 - MAIN_PIN_SIZE.height,
     maxY: 600 - MAIN_PIN_SIZE.height - window.scrollY
   };
@@ -22,7 +20,6 @@
   mapPinMain.addEventListener('mousedown', mainPinActivationHandler);
 
   function mainPinActivationHandler(downEvt) {
-    console.log(BOUNDS.maxY);
     downEvt.preventDefault();
     map.classList.remove('map--faded');
     mapPinMain.removeEventListener('mousedown', mainPinActivationHandler);
