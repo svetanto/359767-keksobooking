@@ -6,12 +6,15 @@
   var checkinInput = document.querySelector('#timein');
   var checkoutInput = document.querySelector('#timeout');
 
-  checkinInput.addEventListener('input', syncCheckTimeHandler);
-  checkoutInput.addEventListener('input', syncCheckTimeHandler);
+  checkinInput.addEventListener('input', function () {
+    window.synchronizeFields(checkinInput, checkoutInput, syncCheckTime(checkoutInput, checkinInput));
+  });
+  checkoutInput.addEventListener('input', function () {
+    window.synchronizeFields(checkoutInput, checkinInput, syncCheckTime(checkinInput, checkoutInput));
+  });
 
-  function syncCheckTimeHandler(evt) {
-    var syncField = (evt.target.id === 'timein') ? checkoutInput : checkinInput;
-    syncField.value = evt.target.value;
+  function syncCheckTime(syncWhat, syncWith) {
+    syncWhat.value = syncWith.value;
   }
 
   // Синхронизация поля «Тип жилья» с минимальной ценой в поле «Цена за ночь, руб.»
@@ -26,12 +29,14 @@
   var priceInput = document.querySelector('#price');
   priceInput.min = 1000;
 
-  typeInput.addEventListener('input', setMinPrice);
+  typeInput.addEventListener('input', function () {
+    window.synchronizeFields(priceInput, typeInput, setMinPrice);
+  });
 
-  function setMinPrice() {
-    priceInput.min = MIN_PRICE_CONFIG[typeInput.value];
-    if (Number(priceInput.value) < Number(priceInput.min)) {
-      priceInput.value = priceInput.min;
+  function setMinPrice(syncWhat, syncWith) {
+    syncWhat.min = MIN_PRICE_CONFIG[syncWith.value];
+    if (Number(syncWhat.value) < Number(syncWhat.min)) {
+      syncWhat.value = syncWhat.min;
     }
   }
 
@@ -51,7 +56,9 @@
     guestsNumberOptions.push(capacity.querySelector('option[value="' + (3 - i) + '"]'));
   }
 
-  roomNumber.addEventListener('input', setGuestsNumberOptions);
+  roomNumber.addEventListener('input', function (evt) {
+    window.synchronizeFields(capacity, roomNumber, setGuestsNumberOptions(evt));
+  });
 
   function setGuestsNumberOptions(evt) {
     for (var j = 0; j <= maxNumberOfGuests; j++) {
