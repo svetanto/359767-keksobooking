@@ -6,16 +6,15 @@
   var checkinInput = document.querySelector('#timein');
   var checkoutInput = document.querySelector('#timeout');
 
-  checkinInput.addEventListener('input', function (evt) {
-    window.synchronizeFields(checkinInput, checkoutInput, syncCheckTime(evt));
+  checkinInput.addEventListener('input', function () {
+    window.synchronizeFields(checkinInput, checkoutInput, syncCheckTime(checkoutInput, checkinInput));
   });
-  checkoutInput.addEventListener('input', function (evt) {
-    window.synchronizeFields(checkoutInput, checkinInput, syncCheckTime(evt));
+  checkoutInput.addEventListener('input', function () {
+    window.synchronizeFields(checkoutInput, checkinInput, syncCheckTime(checkinInput, checkoutInput));
   });
 
-  function syncCheckTime(evt) {
-    var syncField = (evt.target.id === 'timein') ? checkoutInput : checkinInput;
-    syncField.value = evt.target.value;
+  function syncCheckTime(syncWhat, syncWith) {
+    syncWhat.value = syncWith.value;
   }
 
   // Синхронизация поля «Тип жилья» с минимальной ценой в поле «Цена за ночь, руб.»
