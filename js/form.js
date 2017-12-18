@@ -6,10 +6,14 @@
   var checkinInput = document.querySelector('#timein');
   var checkoutInput = document.querySelector('#timeout');
 
-  checkinInput.addEventListener('input', syncCheckTimeHandler);
-  checkoutInput.addEventListener('input', syncCheckTimeHandler);
+  checkinInput.addEventListener('input', function (evt) {
+    window.synchronizeFields(checkinInput, checkoutInput, syncCheckTime(evt));
+  });
+  checkoutInput.addEventListener('input', function (evt) {
+    window.synchronizeFields(checkoutInput, checkinInput, syncCheckTime(evt));
+  });
 
-  function syncCheckTimeHandler(evt) {
+  function syncCheckTime(evt) {
     var syncField = (evt.target.id === 'timein') ? checkoutInput : checkinInput;
     syncField.value = evt.target.value;
   }
@@ -53,7 +57,9 @@
     guestsNumberOptions.push(capacity.querySelector('option[value="' + (3 - i) + '"]'));
   }
 
-  roomNumber.addEventListener('input', setGuestsNumberOptions);
+  roomNumber.addEventListener('input', function (evt) {
+    window.synchronizeFields(capacity, roomNumber, setGuestsNumberOptions(evt));
+  });
 
   function setGuestsNumberOptions(evt) {
     for (var j = 0; j <= maxNumberOfGuests; j++) {
