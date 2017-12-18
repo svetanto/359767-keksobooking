@@ -26,12 +26,14 @@
   var priceInput = document.querySelector('#price');
   priceInput.min = 1000;
 
-  typeInput.addEventListener('input', setMinPrice);
+  typeInput.addEventListener('input', function () {
+    window.synchronizeFields(priceInput, typeInput, setMinPrice);
+  });
 
-  function setMinPrice() {
-    priceInput.min = MIN_PRICE_CONFIG[typeInput.value];
-    if (Number(priceInput.value) < Number(priceInput.min)) {
-      priceInput.value = priceInput.min;
+  function setMinPrice(syncWhat, syncWith) {
+    syncWhat.min = MIN_PRICE_CONFIG[syncWith.value];
+    if (Number(syncWhat.value) < Number(syncWhat.min)) {
+      syncWhat.value = syncWhat.min;
     }
   }
 
