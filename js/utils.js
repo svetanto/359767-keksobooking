@@ -47,4 +47,15 @@
     return array;
   };
 
+  window.renderErrorMessage = function (errMessage) {
+    var errorMessageContainer = document.querySelector('.error-message');
+    var errorMessageText = errorMessageContainer.querySelector('.error-message__text');
+    var errorMessageCloseButton = errorMessageContainer.querySelector('.error-message__close');
+    errorMessageText.textContent = 'При обращении к серверу произошла ошибка: ' + errMessage;
+    errorMessageContainer.classList.remove('hidden');
+    errorMessageCloseButton.addEventListener('click', function () {
+      errorMessageContainer.classList.add('hidden');
+    });
+  };
+
 })();
