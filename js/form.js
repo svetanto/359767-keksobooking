@@ -88,9 +88,8 @@
 
   form.addEventListener('submit', function (evt) {
     evt.preventDefault();
-    window.backend.save(new FormData(form), function () {
-      console.log('OK');
-    }, window.renderErrorMessage);
+    window.backend.save(new FormData(form), window.renderSuccessMessage, window.renderErrorMessage);
+    form.reset();
   });
 
 })();

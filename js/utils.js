@@ -58,4 +58,13 @@
     });
   };
 
+  window.renderSuccessMessage = function () {
+    var successMessageContainer = document.querySelector('.success-message');
+    var successMessageCloseButton = successMessageContainer.querySelector('.success-message__close');
+    successMessageContainer.classList.remove('hidden');
+    successMessageCloseButton.addEventListener('click', function () {
+      successMessageContainer.classList.add('hidden');
+    });
+  };
+
 })();

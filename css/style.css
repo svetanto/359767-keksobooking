@@ -848,14 +848,14 @@ textarea:focus
     background-position: -10px -10px;
 }
 
-.error-message {
+.error-message,
+.success-message {
   position: fixed;
   width: 1000px;
   height: 100px;
   top: 50%;
   left: 50%;
   transform: translate(-500px, -150px);
-  background-color: red;
   border: 2px solid black;
   border-radius: 20px;
   padding-top: 20px;
@@ -863,7 +863,16 @@ textarea:focus
   text-align: center;
 }
 
-.error-message__close {
+.error-message {
+  background-color: red;
+}
+
+.success-message {
+  background-color: green;
+}
+
+.error-message__close,
+.success-message__close {
   position: absolute;
   top: 60px;
   left: 400px;
@@ -877,6 +886,7 @@ textarea:focus
 
 }
 
-.error-message__close:hover {
-  background-color: pink;
+.error-message__close:hover,
+.success-message__close:hover {
+  background-color: yellow;
 }
