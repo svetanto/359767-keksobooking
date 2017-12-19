@@ -22,9 +22,13 @@
   function mapActivationHandler(downEvent) {
     downEvent.preventDefault();
     map.classList.remove('map--faded');
-    var numberOfObjects = 8;
-    var inputObject = window.generateInput(numberOfObjects);
-    window.drawMapPins(generateOfferedObjects(inputObject, numberOfObjects));
+
+    window.backend.load(dataLoad, window.renderErrorMessage);
+
+    function dataLoad(input) {
+      window.drawMapPins(input);
+    }
+
     mapPinMain.removeEventListener('mousedown', mapActivationHandler);
     mainPinActivationHandler(downEvent);
   }
@@ -97,7 +101,7 @@
       addressInput.value = 'x: ' + (coordX + MAIN_PIN_SIZE.width / 2 - map.offsetLeft) + ', y: ' + (coordY + MAIN_PIN_SIZE.height);
     }
   }
-
+  /*
   // Функция формирования массива из входных данных
   function generateOfferedObjects(input, number) {
     var array = [];
@@ -140,5 +144,6 @@
       };
     }
   }
+  */
 
 })();

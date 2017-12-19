@@ -847,3 +847,46 @@ textarea:focus
 {
     background-position: -10px -10px;
 }
+
+.error-message,
+.success-message {
+  position: fixed;
+  width: 1000px;
+  height: 100px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-500px, -150px);
+  border: 2px solid black;
+  border-radius: 20px;
+  padding-top: 20px;
+  color: white;
+  text-align: center;
+}
+
+.error-message {
+  background-color: red;
+}
+
+.success-message {
+  background-color: green;
+}
+
+.error-message__close,
+.success-message__close {
+  position: absolute;
+  top: 60px;
+  left: 400px;
+  width: 200px;
+  height: 50px;
+  background-color: white;
+  text-align: center;
+  color: black;
+  border: 1px solid black;
+  border-radius: 10px;
+
+}
+
+.error-message__close:hover,
+.success-message__close:hover {
+  background-color: yellow;
+}

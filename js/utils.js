@@ -47,4 +47,24 @@
     return array;
   };
 
+  window.renderErrorMessage = function (errMessage) {
+    var errorMessageContainer = document.querySelector('.error-message');
+    var errorMessageText = errorMessageContainer.querySelector('.error-message__text');
+    var errorMessageCloseButton = errorMessageContainer.querySelector('.error-message__close');
+    errorMessageText.textContent = 'При обращении к серверу произошла ошибка: ' + errMessage;
+    errorMessageContainer.classList.remove('hidden');
+    errorMessageCloseButton.addEventListener('click', function () {
+      errorMessageContainer.classList.add('hidden');
+    });
+  };
+
+  window.renderSuccessMessage = function () {
+    var successMessageContainer = document.querySelector('.success-message');
+    var successMessageCloseButton = successMessageContainer.querySelector('.success-message__close');
+    successMessageContainer.classList.remove('hidden');
+    successMessageCloseButton.addEventListener('click', function () {
+      successMessageContainer.classList.add('hidden');
+    });
+  };
+
 })();

@@ -83,4 +83,13 @@
     });
   }
 
+  // Отправка формы
+  var form = document.querySelector('.notice__form');
+
+  form.addEventListener('submit', function (evt) {
+    evt.preventDefault();
+    window.backend.save(new FormData(form), window.renderSuccessMessage, window.renderErrorMessage);
+    form.reset();
+  });
+
 })();
