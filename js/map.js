@@ -4,6 +4,7 @@
 
   var map = document.querySelector('.map');
   var mapPinMain = map.querySelector('.map__pin--main');
+  var firstMove = true;
 
   var MAIN_PIN_SIZE = {
     width: 62,
@@ -16,6 +17,8 @@
     minY: 200 - MAIN_PIN_SIZE.height,
     maxY: 650 - MAIN_PIN_SIZE.height - window.scrollY
   };
+
+  var PIN_LIMIT = 5;
 
   mapPinMain.addEventListener('mousedown', mapActivationHandler);
 
@@ -83,10 +86,14 @@
       document.removeEventListener('mousemove', mouseMoveHandler);
       document.removeEventListener('mouseup', mouseUpHandler);
 
-      window.backend.load(dataLoad, window.renderErrorMessage);
+      if (firstMove) {
+        window.backend.load(dataLoad, window.renderErrorMessage);
+        firstMove = false;
+      }
 
       function dataLoad(input) {
-        window.filterObjects(input);
+        window.drawMapPins(input.slice(0, PIN_LIMIT));
+        window.initFilter(input, PIN_LIMIT, window.drawMapPins);
       }
 
       var noticeForm = document.querySelector('.notice__form');
