@@ -58,13 +58,24 @@
     });
   };
 
-  window.renderSuccessMessage = function () {
+  window.renderSuccessMessage = function (form) {
     var successMessageContainer = document.querySelector('.success-message');
     var successMessageCloseButton = successMessageContainer.querySelector('.success-message__close');
+    form.reset();
     successMessageContainer.classList.remove('hidden');
     successMessageCloseButton.addEventListener('click', function () {
       successMessageContainer.classList.add('hidden');
     });
+  };
+
+  var DEBOUNCE_INTERVAL = 500;
+  var lastTimeout;
+
+  window.debounce = function (functionToBeDebounced) {
+    if (lastTimeout) {
+      window.clearTimeout(lastTimeout);
+    }
+    lastTimeout = window.setTimeout(functionToBeDebounced, DEBOUNCE_INTERVAL);
   };
 
 })();

@@ -8,7 +8,7 @@
     var mapCardTemplate = mapTemplate.querySelector('.map__card');
     var map = document.querySelector('.map');
 
-    removeCard();
+    window.removeCard();
     var fragment = document.createDocumentFragment();
     fragment.appendChild(renderMapCard(object));
     map.insertBefore(fragment, map.querySelector('.map__filters-container'));
@@ -25,17 +25,10 @@
     }
 
     function closeCard() {
-      removeCard();
+      window.removeCard();
       pin.classList.remove('map__pin--active');
       window.previousPin = null;
       window.removeEventListener('keydown', cardPressEscHandler);
-    }
-
-    function removeCard() {
-      var card = map.querySelector('.map__card');
-      if (card) {
-        map.removeChild(card);
-      }
     }
 
     function renderMapCard(data) {
@@ -61,6 +54,7 @@
       mapCard.querySelector('.popup__avatar').src = data.author.avatar;
 
       // Вставка в карточку фоток - непонятно надо это или нет??
+      /*
       function renderPhotos() {
         var popupPictures = mapCard.querySelector('.popup__pictures');
         var listItemTemplate = popupPictures.querySelector('li');
@@ -77,7 +71,16 @@
       }
 
       renderPhotos();
+      */
       return mapCard;
+    }
+  };
+
+  window.removeCard = function () {
+    var map = document.querySelector('.map');
+    var card = map.querySelector('.map__card');
+    if (card) {
+      map.removeChild(card);
     }
   };
 
