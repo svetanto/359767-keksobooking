@@ -4,6 +4,18 @@
 
   window.drawMapPins = function (objects) {
 
+    // Удаление старых пинов и карточки (if any)
+    window.removeCard();
+
+    var mapPins = document.querySelector('.map__pins');
+    var oldMapPins = mapPins.querySelectorAll('.map__pin:not(.map__pin--main)');
+    // console.log(oldMapPins);
+    if (oldMapPins) {
+      for (var j = 0; j < oldMapPins.length; j++) {
+        mapPins.removeChild(oldMapPins[j]);
+      }
+    }
+
     var mapTemplate = document.querySelector('template').content;
     var mapPinTemplate = mapTemplate.querySelector('.map__pin');
     window.previousPin = null;

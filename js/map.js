@@ -4,6 +4,7 @@
 
   var map = document.querySelector('.map');
   var mapPinMain = map.querySelector('.map__pin--main');
+  var firstMove = true;
 
   var MAIN_PIN_SIZE = {
     width: 62,
@@ -13,21 +14,17 @@
   var BOUNDS = {
     minX: map.offsetLeft + MAIN_PIN_SIZE.width / 2,
     maxX: map.offsetLeft + map.clientWidth - MAIN_PIN_SIZE.width / 2,
-    minY: 150 - MAIN_PIN_SIZE.height,
-    maxY: 600 - MAIN_PIN_SIZE.height - window.scrollY
+    minY: 200 - MAIN_PIN_SIZE.height,
+    maxY: 650 - MAIN_PIN_SIZE.height - window.scrollY
   };
+
+  var PIN_LIMIT = 5;
 
   mapPinMain.addEventListener('mousedown', mapActivationHandler);
 
   function mapActivationHandler(downEvent) {
     downEvent.preventDefault();
     map.classList.remove('map--faded');
-
-    window.backend.load(dataLoad, window.renderErrorMessage);
-
-    function dataLoad(input) {
-      window.drawMapPins(input);
-    }
 
     mapPinMain.removeEventListener('mousedown', mapActivationHandler);
     mainPinActivationHandler(downEvent);
@@ -89,9 +86,18 @@
       document.removeEventListener('mousemove', mouseMoveHandler);
       document.removeEventListener('mouseup', mouseUpHandler);
 
+      if (firstMove) {
+        window.backend.load(dataLoad, window.renderErrorMessage);
+        firstMove = false;
+      }
+
+      function dataLoad(input) {
+        window.drawMapPins(input.slice(0, PIN_LIMIT));
+        window.initFilter(input, PIN_LIMIT, window.drawMapPins);
+      }
+
       var noticeForm = document.querySelector('.notice__form');
       var fieldsets = noticeForm.querySelectorAll('fieldset');
-
 
       noticeForm.classList.remove('notice__form--disabled');
       for (var i = 0; i < fieldsets.length; i++) {
@@ -101,49 +107,5 @@
       addressInput.value = 'x: ' + (coordX + MAIN_PIN_SIZE.width / 2 - map.offsetLeft) + ', y: ' + (coordY + MAIN_PIN_SIZE.height);
     }
   }
-  /*
-  // Функция формирования массива из входных данных
-  function generateOfferedObjects(input, number) {
-    var array = [];
-    for (var i = 0; i < number; i++) {
-      array[i] =
-          {
-            author: generateAuthorObject(input, i),
-            offer: generateOfferObject(input, i),
-            location: generateLocationObject(input, i)
-          };
-    }
-    return array;
-
-    function generateAuthorObject(inp, num) {
-      return {
-        avatar: inp.avatars[num]
-      };
-    }
-
-    function generateOfferObject(inp, num) {
-      return {
-        title: inp.titles[num],
-        address: inp.addresses[num],
-        price: inp.prices[num],
-        type: inp.types[num],
-        rooms: inp.rooms[num],
-        guests: inp.guests[num],
-        checkin: inp.checkins[num],
-        checkout: inp.checkouts[num],
-        features: inp.features[num],
-        description: inp.descriptions,
-        photos: inp.photos
-      };
-    }
-
-    function generateLocationObject(inp, num) {
-      return {
-        x: inp.x[num],
-        y: inp.y[num]
-      };
-    }
-  }
-  */
 
 })();
