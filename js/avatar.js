@@ -36,9 +36,12 @@
   });
 
   avatarDropzone.addEventListener('drop', function (evt) {
-    evt.preventDefault();
+
     avatarDropzone.style.background = 'red';
     console.log('drop');
+    evt.stopPropagation();
+    evt.preventDefault();
+    return false;
   });
 
 })();

@@ -27,7 +27,7 @@
 
   var typeInput = document.querySelector('#type');
   var priceInput = document.querySelector('#price');
-  priceInput.min = 1000;
+  priceInput.min = MIN_PRICE_CONFIG.flat;
 
   typeInput.addEventListener('input', function () {
     window.synchronizeFields(priceInput, typeInput, setMinPrice);
@@ -70,25 +70,26 @@
   // Подсветка невалидных полей
   var watchedInputs = [
     document.querySelector('#title'),
-    document.querySelector('#address'),
     document.querySelector('#price')
   ];
 
-  for (i = 0; i < watchedInputs.length; i++) {
-    watchedInputs[i].addEventListener('invalid', function (evt) {
+  watchedInputs.forEach(function (item) {
+    item.addEventListener('invalid', function (evt) {
       evt.target.style = 'border: 2px solid red';
     });
-    watchedInputs[i].addEventListener('blur', function (evt) {
+    item.addEventListener('blur', function (evt) {
       evt.target.style = 'border: 1px solid #eee';
     });
-  }
+  });
 
   // Отправка формы
   var form = document.querySelector('.notice__form');
 
   form.addEventListener('submit', function (evt) {
     evt.preventDefault();
-    window.backend.save(new FormData(form), window.renderSuccessMessage(form), window.renderErrorMessage);
+    window.backend.save(new FormData(form), function () {
+      window.renderSuccessMessage(form);
+    }, window.renderErrorMessage);
   });
 
 })();

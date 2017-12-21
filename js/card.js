@@ -42,13 +42,13 @@
 
       var popupFeatures = mapCard.querySelector('.popup__features');
       var blocks = popupFeatures.querySelectorAll('li');
-      for (var i = 0; i < blocks.length; i++) {
-        if (data.offer.features[i]) {
-          blocks[i].classList = 'feature feature--' + data.offer.features[i];
+      blocks.forEach(function (item, index) {
+        if (data.offer.features[index]) {
+          item.classList = 'feature feature--' + data.offer.features[index];
         } else {
-          popupFeatures.removeChild(blocks[i]);
+          popupFeatures.removeChild(item);
         }
-      }
+      });
 
       mapCard.querySelector('p:nth-of-type(5)').textContent = data.offer.description;
       mapCard.querySelector('.popup__avatar').src = data.author.avatar;

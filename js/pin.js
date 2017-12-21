@@ -9,11 +9,10 @@
 
     var mapPins = document.querySelector('.map__pins');
     var oldMapPins = mapPins.querySelectorAll('.map__pin:not(.map__pin--main)');
-    // console.log(oldMapPins);
     if (oldMapPins) {
-      for (var j = 0; j < oldMapPins.length; j++) {
-        mapPins.removeChild(oldMapPins[j]);
-      }
+      oldMapPins.forEach(function (item) {
+        mapPins.removeChild(item);
+      });
     }
 
     var mapTemplate = document.querySelector('template').content;
@@ -21,9 +20,10 @@
     window.previousPin = null;
     var pinsOverlay = document.querySelector('.map__pins');
     var fragment = document.createDocumentFragment();
-    for (var i = 0; i < objects.length; i++) {
-      fragment.appendChild(renderMapPin(objects[i], i));
-    }
+    objects.forEach(function (item, index) {
+      fragment.appendChild(renderMapPin(item, index));
+    });
+
     pinsOverlay.appendChild(fragment);
 
     function renderMapPin(object, index) {

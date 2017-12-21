@@ -14,9 +14,14 @@
   var BOUNDS = {
     minX: map.offsetLeft + MAIN_PIN_SIZE.width / 2,
     maxX: map.offsetLeft + map.clientWidth - MAIN_PIN_SIZE.width / 2,
-    minY: 200 - MAIN_PIN_SIZE.height,
+    minY: 200 - MAIN_PIN_SIZE.height - window.scrollY,
     maxY: 650 - MAIN_PIN_SIZE.height - window.scrollY
   };
+
+  window.addEventListener('scroll', function () {
+    BOUNDS.minY = 200 - MAIN_PIN_SIZE.height - window.scrollY;
+    BOUNDS.maxY = 650 - MAIN_PIN_SIZE.height - window.scrollY;
+  });
 
   var PIN_LIMIT = 5;
 
@@ -34,6 +39,7 @@
     downEvt.preventDefault();
     mapPinMain.addEventListener('mousedown', mainPinActivationHandler);
     document.addEventListener('mousemove', mouseMoveHandler);
+    document.addEventListener('mouseup', mouseUpHandler);
 
     var startCoords = {
       x: downEvt.clientX,
@@ -45,8 +51,6 @@
 
     function mouseMoveHandler(moveEvt) {
       moveEvt.preventDefault();
-
-      document.addEventListener('mouseup', mouseUpHandler);
 
       coordX = moveEvt.clientX;
       coordY = moveEvt.clientY;
@@ -100,9 +104,11 @@
       var fieldsets = noticeForm.querySelectorAll('fieldset');
 
       noticeForm.classList.remove('notice__form--disabled');
-      for (var i = 0; i < fieldsets.length; i++) {
-        fieldsets[i].removeAttribute('disabled');
-      }
+
+      fieldsets.forEach(function (item) {
+        item.removeAttribute('disabled');
+      });
+
       var addressInput = noticeForm.querySelector('#address');
       addressInput.value = 'x: ' + (coordX + MAIN_PIN_SIZE.width / 2 - map.offsetLeft) + ', y: ' + (coordY + MAIN_PIN_SIZE.height);
     }

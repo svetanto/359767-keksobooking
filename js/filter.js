@@ -19,7 +19,7 @@
       var housingGuests = mapFilters.querySelector('#housing-guests');
       var housingFeatures = mapFilters.querySelector('#housing-features');
 
-      var housingPriceMap = {
+      var HOUSING_PRICE_MAP = {
         low: {
           min: 0,
           max: 10000
@@ -45,7 +45,7 @@
 
       var filteredObjects = objects.filter(function (element) {
         return ((element.offer.type === housingType.value) || (housingType.value === 'any')) &&
-        ((housingPriceMap[housingPrice.value].min <= element.offer.price) && (element.offer.price <= housingPriceMap[housingPrice.value].max)) &&
+        ((HOUSING_PRICE_MAP[housingPrice.value].min <= element.offer.price) && (element.offer.price <= HOUSING_PRICE_MAP[housingPrice.value].max)) &&
         ((element.offer.rooms.toString() === housingRooms.value) || (housingRooms.value === 'any')) &&
         ((element.offer.guests.toString() === housingGuests.value) || (housingGuests.value === 'any')) &&
         checkFeatures(element.offer.features);
