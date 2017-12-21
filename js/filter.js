@@ -7,7 +7,9 @@
     var mapFilters = document.querySelector('.map__filters');
 
     mapFilters.addEventListener('change', function () {
-      window.debounce(callback(getFilteredObjects()));
+      window.debounce(function () {
+        callback(getFilteredObjects());
+      });
     });
 
     function getFilteredObjects() {
