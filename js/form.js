@@ -70,7 +70,8 @@
   // Подсветка невалидных полей
   var watchedInputs = [
     document.querySelector('#title'),
-    document.querySelector('#price')
+    document.querySelector('#price'),
+    document.querySelector('#address')
   ];
 
   watchedInputs.forEach(function (item) {
@@ -89,8 +90,25 @@
     }
   };
 
-  // Отправка формы
   var form = document.querySelector('.notice__form');
+
+  window.clearFormImages = function (formToClear) {
+    var avatarImage = formToClear.querySelector('.notice__preview img');
+    avatarImage.src = 'img/muffin.png';
+    var housingImagesContainer = form.querySelector('.form__photo-container');
+    var housingImages = housingImagesContainer.querySelectorAll('img');
+    if (housingImages) {
+      housingImages.forEach(function (item) {
+        housingImagesContainer.removeChild(item);
+      });
+    }
+  };
+
+  form.addEventListener('reset', function () {
+    window.clearFormImages(form);
+  });
+
+  // Отправка формы
 
   form.addEventListener('submit', function (evt) {
     evt.preventDefault();
