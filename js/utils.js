@@ -88,17 +88,4 @@
     });
   };
 
-  var fileURL;
-
-  window.readFiles = function (inputFiles) {
-    var reader = new FileReader();
-    reader.addEventListener('load', function () {
-      fileURL = reader.result;
-      console.log(fileURL);
-    });
-    reader.readAsDataURL(inputFiles);
-    console.log(fileURL);
-    return fileURL;
-  };
-
 })();
