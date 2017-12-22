@@ -53,19 +53,18 @@
       mapCard.querySelector('p:nth-of-type(5)').textContent = data.offer.description;
       mapCard.querySelector('.popup__avatar').src = data.author.avatar;
 
-      // Вставка в карточку фоток - непонятно надо это или нет??
+      // Вставка в карточку фоток
       function renderPhotos() {
         var popupPictures = mapCard.querySelector('.popup__pictures');
         var listItemTemplate = popupPictures.querySelector('li');
         popupPictures.removeChild(listItemTemplate);
         var photosFragment = document.createDocumentFragment();
-        for (var j = 0; j < data.offer.photos.length; j++) {
+        data.offer.photos.forEach(function (item) {
           var listItem = listItemTemplate.cloneNode(true);
           var image = listItem.querySelector('img');
-          image.src = data.offer.photos[j];
+          image.src = item;
           photosFragment.appendChild(listItem);
-          // console.log(block);
-        }
+        });
         popupPictures.appendChild(photosFragment);
       }
 
