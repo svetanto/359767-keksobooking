@@ -82,6 +82,13 @@
     });
   });
 
+  window.clearDependencies = function () {
+    priceInput.min = MIN_PRICE_CONFIG.flat;
+    for (var j = 0; j <= maxNumberOfGuests; j++) {
+      guestsNumberOptions[j].disabled = !ROOMS_SYNC_CAPACITY[1][j];
+    }
+  };
+
   // Отправка формы
   var form = document.querySelector('.notice__form');
 

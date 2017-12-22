@@ -36,14 +36,7 @@
     evt.stopPropagation();
     evt.preventDefault();
     avatarDropzone.style.background = 'transparent';
-    var file = evt.dataTransfer.files[0];
-    if (window.checkIsFileImageType(file.name)) {
-      var reader = new FileReader();
-      reader.addEventListener('load', function () {
-        preview.src = reader.result;
-      });
-      reader.readAsDataURL(file);
-    }
+    fileChooser.files = evt.dataTransfer.files;
   }
 
   function handleDragOver(evt) {

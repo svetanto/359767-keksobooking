@@ -63,6 +63,17 @@
 
   window.renderSuccessMessage = function (form) {
     form.reset();
+    window.clearDependencies();
+    var avatarImage = form.querySelector('.notice__preview img');
+    avatarImage.src = 'img/muffin.png';
+    var housingImagesContainer = form.querySelector('.form__photo-container');
+    var housingImages = housingImagesContainer.querySelectorAll('img');
+    if (housingImages) {
+      housingImages.forEach(function (item) {
+        housingImagesContainer.removeChild(item);
+      });
+    }
+
     alertMessageContainer.style = 'background-color: green;';
     alertMessageText.textContent = 'Данные формы успешно отправлены на сервер';
     alertMessageCloseButton.textContent = 'Радость-то какая!';

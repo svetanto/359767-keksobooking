@@ -52,20 +52,7 @@
     evt.stopPropagation();
     evt.preventDefault();
     housingPhotoDropzone.style.background = 'transparent';
-    var filesList = evt.dataTransfer.files;
-    var imageFilesList = {};
-    var j = 0;
-    for (var i = 0; i < filesList.length; i++) {
-      if (window.checkIsFileImageType(filesList[i].name)) {
-        imageFilesList[j] = filesList[i];
-        j++;
-      }
-    }
-    if (imageFilesList) {
-      Object.keys(imageFilesList).forEach(function (el) {
-        readAndDisplayImage(imageFilesList[el]);
-      });
-    }
+    fileChooser.files = evt.dataTransfer.files;
   }
 
   function handleDragOver(evt) {
