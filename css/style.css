@@ -890,3 +890,9 @@ textarea:focus
 .alert-message__close:hover {
   background-color: yellow;
 }
+
+.popup__pictures img {
+  height: 30px;
+  margin-left: 5px;
+  margin-bottom: 5px;
+}

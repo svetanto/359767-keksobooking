@@ -54,7 +54,6 @@
       mapCard.querySelector('.popup__avatar').src = data.author.avatar;
 
       // Вставка в карточку фоток - непонятно надо это или нет??
-      /*
       function renderPhotos() {
         var popupPictures = mapCard.querySelector('.popup__pictures');
         var listItemTemplate = popupPictures.querySelector('li');
@@ -71,7 +70,6 @@
       }
 
       renderPhotos();
-      */
       return mapCard;
     }
   };
