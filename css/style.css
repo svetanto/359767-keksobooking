@@ -711,6 +711,7 @@ textarea:focus
     font-size: 14px;
 
     box-sizing: border-box;
+    width: 140px;
     height: 70px;
     padding: 10px 10px 5px;
 
@@ -728,7 +729,17 @@ textarea:focus
 
 .form__photo-container
 {
-    width: 140px;
+    display: flex;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    width: 460px;
+}
+
+.form__photo-container img {
+  display: inline;
+  height: 70px;
+  margin-left: 10px;
+  margin-bottom: 10px;
 }
 
 .form__element--submit
@@ -848,8 +859,7 @@ textarea:focus
     background-position: -10px -10px;
 }
 
-.error-message,
-.success-message {
+.alert-message {
   position: fixed;
   width: 1000px;
   height: 100px;
@@ -863,16 +873,7 @@ textarea:focus
   text-align: center;
 }
 
-.error-message {
-  background-color: red;
-}
-
-.success-message {
-  background-color: green;
-}
-
-.error-message__close,
-.success-message__close {
+.alert-message__close {
   position: absolute;
   top: 60px;
   left: 400px;
@@ -886,7 +887,6 @@ textarea:focus
 
 }
 
-.error-message__close:hover,
-.success-message__close:hover {
+.alert-message__close:hover {
   background-color: yellow;
 }

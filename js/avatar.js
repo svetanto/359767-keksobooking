@@ -2,21 +2,15 @@
 
 (function () {
 
-  var FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png', 'webp'];
-
-  var fileChooser = document.querySelector('.upload input[type=file]');
+  // Загрузка файла выбором в диалоговом окне
+  var fileChooser = document.querySelector('#avatar');
   var preview = document.querySelector('.notice__preview img');
 
   fileChooser.addEventListener('change', function () {
     var file = fileChooser.files[0];
-    var fileName = file.name.toLowerCase();
-    var matches = FILE_TYPES.some(function (it) {
-      return fileName.endsWith(it);
-    });
 
-    if (matches) {
+    if (window.checkIsFileImageType(file.name)) {
       var reader = new FileReader();
-
       reader.addEventListener('load', function () {
         preview.src = reader.result;
       });
@@ -25,8 +19,8 @@
     }
   });
 
+  // Загрузка файла перетаскиванием
   var avatarDropzone = document.querySelector('.notice__photo .drop-zone');
-  // console.log(avatarDropzone);
   avatarDropzone.addEventListener('dragenter', function () {
     avatarDropzone.style.background = 'lightgreen';
   });
@@ -35,13 +29,26 @@
     avatarDropzone.style.background = 'transparent';
   });
 
-  avatarDropzone.addEventListener('drop', function (evt) {
+  avatarDropzone.addEventListener('dragover', handleDragOver, false);
+  avatarDropzone.addEventListener('drop', handleFileSelect, false);
 
-    avatarDropzone.style.background = 'red';
-    console.log('drop');
+  function handleFileSelect(evt) {
     evt.stopPropagation();
     evt.preventDefault();
-    return false;
-  });
+    avatarDropzone.style.background = 'transparent';
+    var file = evt.dataTransfer.files[0];
+    if (window.checkIsFileImageType(file.name)) {
+      var reader = new FileReader();
+      reader.addEventListener('load', function () {
+        preview.src = reader.result;
+      });
+      reader.readAsDataURL(file);
+    }
+  }
+
+  function handleDragOver(evt) {
+    evt.stopPropagation();
+    evt.preventDefault();
+  }
 
 })();

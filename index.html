@@ -192,9 +192,10 @@
           <label>Фотографии жилья</label>
           <div class="form__photo-container">
             <div class="upload">
-              <input type="file" id="images">
+              <input type="file" id="images" multiple>
               <label for="images" class="drop-zone">Загрузите или&nbsp;перетащите сюда фото</label>
             </div>
+            <!-- <img src="https://cdn.ostrovok.ru/t/x500/mec/hotels/5000000/4500000/4493700/4493658/4493658_17_b.jpg"> -->
           </div>
         </fieldset>
 
@@ -241,20 +242,16 @@
       <p>Великолепная квартира-студия в центре Токио. Подходит как туристам, так и бизнесменам. Квартира полностью укомплектована и недавно отремонтирована.</p>
       <ul class="popup__pictures">
         <li><img src=""></li>
+        <!-- <li><img src="https://cdn.ostrovok.ru/t/x500/mec/hotels/5000000/4500000/4493700/4493658/4493658_17_b.jpg"></li> -->
       </ul>
     </article>
 
     <button style="left: 200px; top: 400px;" class="map__pin" tabindex="0"><img src="img/avatars/user07.png" width="40" height="40" draggable="false"></button>
   </template>
 
-  <div class="error-message hidden">
-    <span class="error-message__text">Произошла ошибка</span>
-    <button class="error-message__close">Да понял я, понял...</button>
-  </div>
-
-  <div class="success-message hidden">
-    <span class="success-message__text">Данные формы успешно отправлены на сервер</span>
-    <button class="success-message__close">Радость-то какая!</button>
+  <div class="alert-message hidden">
+    <span class="alert-message__text"></span>
+    <button class="alert-message__close"></button>
   </div>
 
   <script src="js/utils.js"></script>
@@ -266,5 +263,6 @@
   <script src="js/form.js"></script>
   <script src="js/backend.js"></script>
   <script src="js/avatar.js"></script>
+  <script src="js/housing-photo.js"></script>
   </body>
 </html>

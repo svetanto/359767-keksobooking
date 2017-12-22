@@ -47,24 +47,28 @@
     return array;
   };
 
+  var alertMessageContainer = document.querySelector('.alert-message');
+  var alertMessageText = alertMessageContainer.querySelector('.alert-message__text');
+  var alertMessageCloseButton = alertMessageContainer.querySelector('.alert-message__close');
+
   window.renderErrorMessage = function (errMessage) {
-    var errorMessageContainer = document.querySelector('.error-message');
-    var errorMessageText = errorMessageContainer.querySelector('.error-message__text');
-    var errorMessageCloseButton = errorMessageContainer.querySelector('.error-message__close');
-    errorMessageText.textContent = 'При обращении к серверу произошла ошибка: ' + errMessage;
-    errorMessageContainer.classList.remove('hidden');
-    errorMessageCloseButton.addEventListener('click', function () {
-      errorMessageContainer.classList.add('hidden');
+    alertMessageContainer.style = 'background-color: red;';
+    alertMessageText.textContent = 'При обращении к серверу произошла ошибка: ' + errMessage;
+    alertMessageCloseButton.textContent = 'Вот горе-то...';
+    alertMessageContainer.classList.remove('hidden');
+    alertMessageCloseButton.addEventListener('click', function () {
+      alertMessageContainer.classList.add('hidden');
     });
   };
 
   window.renderSuccessMessage = function (form) {
-    var successMessageContainer = document.querySelector('.success-message');
-    var successMessageCloseButton = successMessageContainer.querySelector('.success-message__close');
     form.reset();
-    successMessageContainer.classList.remove('hidden');
-    successMessageCloseButton.addEventListener('click', function () {
-      successMessageContainer.classList.add('hidden');
+    alertMessageContainer.style = 'background-color: green;';
+    alertMessageText.textContent = 'Данные формы успешно отправлены на сервер';
+    alertMessageCloseButton.textContent = 'Радость-то какая!';
+    alertMessageContainer.classList.remove('hidden');
+    alertMessageCloseButton.addEventListener('click', function () {
+      alertMessageContainer.classList.add('hidden');
     });
   };
 
@@ -76,6 +80,25 @@
       window.clearTimeout(lastTimeout);
     }
     lastTimeout = window.setTimeout(functionToBeDebounced, DEBOUNCE_INTERVAL);
+  };
+
+  window.checkIsFileImageType = function (inputFileName) {
+    return ['gif', 'jpg', 'jpeg', 'png', 'webp'].some(function (it) {
+      return inputFileName.toLowerCase().endsWith(it);
+    });
+  };
+
+  var fileURL;
+
+  window.readFiles = function (inputFiles) {
+    var reader = new FileReader();
+    reader.addEventListener('load', function () {
+      fileURL = reader.result;
+      console.log(fileURL);
+    });
+    reader.readAsDataURL(inputFiles);
+    console.log(fileURL);
+    return fileURL;
   };
 
 })();
