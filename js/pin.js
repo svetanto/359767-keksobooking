@@ -5,7 +5,7 @@
   window.drawMapPins = function (objects) {
 
     // Удаление старых пинов и карточки (if any)
-    window.removeCard();
+    window.card.remove();
 
     var mapPins = document.querySelector('.map__pins');
     var oldMapPins = mapPins.querySelectorAll('.map__pin:not(.map__pin--main)');
@@ -18,13 +18,12 @@
     var mapTemplate = document.querySelector('template').content;
     var mapPinTemplate = mapTemplate.querySelector('.map__pin');
     window.previousPin = null;
-    var pinsOverlay = document.querySelector('.map__pins');
     var fragment = document.createDocumentFragment();
     objects.forEach(function (item, index) {
       fragment.appendChild(renderMapPin(item, index));
     });
 
-    pinsOverlay.appendChild(fragment);
+    mapPins.appendChild(fragment);
 
     function renderMapPin(object, index) {
       var mapPin = mapPinTemplate.cloneNode(true);
@@ -42,7 +41,7 @@
         }
         window.previousPin = pin;
         pin.classList.add('map__pin--active');
-        window.drawMapCard(objects[pinNumber], pin);
+        window.card.draw(objects[pinNumber], pin);
       }
       return mapPin;
     }

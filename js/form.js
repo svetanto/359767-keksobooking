@@ -2,6 +2,20 @@
 
 (function () {
 
+  var MIN_PRICE_CONFIG = {
+    bungalo: 0,
+    flat: 1000,
+    house: 5000,
+    palace: 10000
+  };
+
+  var ROOMS_SYNC_CAPACITY = {
+    1: [false, true, false, false],
+    2: [false, true, true, false],
+    3: [false, true, true, true],
+    100: [true, false, false, false]
+  };
+
   // Синхронизация полей «время заезда» и «время выезда»
   var checkinInput = document.querySelector('#timein');
   var checkoutInput = document.querySelector('#timeout');
@@ -18,12 +32,6 @@
   }
 
   // Синхронизация поля «Тип жилья» с минимальной ценой в поле «Цена за ночь, руб.»
-  var MIN_PRICE_CONFIG = {
-    bungalo: 0,
-    flat: 1000,
-    house: 5000,
-    palace: 10000
-  };
 
   var typeInput = document.querySelector('#type');
   var priceInput = document.querySelector('#price');
@@ -41,12 +49,7 @@
   }
 
   // Синхронизация поля «Кол-во комнат» с полем «Количество мест»
-  var ROOMS_SYNC_CAPACITY = {
-    1: [false, true, false, false],
-    2: [false, true, true, false],
-    3: [false, true, true, true],
-    100: [true, false, false, false]
-  };
+
   var maxNumberOfGuests = 3;
   var guestsNumberOptions = [];
   var roomNumber = document.querySelector('#room_number');
@@ -113,8 +116,8 @@
   form.addEventListener('submit', function (evt) {
     evt.preventDefault();
     window.backend.save(new FormData(form), function () {
-      window.renderSuccessMessage(form);
-    }, window.renderErrorMessage);
+      window.utils.renderSuccessMessage(form);
+    }, window.utils.renderErrorMessage);
   });
 
 })();

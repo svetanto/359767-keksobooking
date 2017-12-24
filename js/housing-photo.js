@@ -11,7 +11,7 @@
     var imageFilesList = {};
     var j = 0;
     for (var i = 0; i < filesList.length; i++) {
-      if (window.checkIsFileImageType(filesList[i].name)) {
+      if (window.utils.checkIsFileImageType(filesList[i].name)) {
         imageFilesList[j] = filesList[i];
         j++;
       }

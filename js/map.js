@@ -18,6 +18,8 @@
     maxY: 650 - MAIN_PIN_SIZE.height - window.scrollY
   };
 
+  var PIN_LIMIT = 5;
+
   var coordX = mapPinMain.offsetLeft + map.offsetLeft;
   var coordY = mapPinMain.offsetTop - window.scrollY;
 
@@ -25,8 +27,6 @@
     BOUNDS.minY = 200 - MAIN_PIN_SIZE.height - window.scrollY;
     BOUNDS.maxY = 650 - MAIN_PIN_SIZE.height - window.scrollY;
   });
-
-  var PIN_LIMIT = 5;
 
   mapPinMain.addEventListener('mousedown', mapActivationHandler);
 
@@ -91,7 +91,7 @@
       document.removeEventListener('mouseup', mouseUpHandler);
 
       if (firstMove) {
-        window.backend.load(dataLoad, window.renderErrorMessage);
+        window.backend.load(dataLoad, window.utils.renderErrorMessage);
         firstMove = false;
       }
 

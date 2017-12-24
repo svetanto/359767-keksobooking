@@ -9,7 +9,7 @@
   fileChooser.addEventListener('change', function () {
     var file = fileChooser.files[0];
 
-    if (window.checkIsFileImageType(file.name)) {
+    if (window.utils.checkIsFileImageType(file.name)) {
       var reader = new FileReader();
       reader.addEventListener('load', function () {
         preview.src = reader.result;
