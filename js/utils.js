@@ -23,16 +23,6 @@
       }
     },
 
-    'shuffleArray': function (array) {
-      for (var i = array.length - 1; i; i--) {
-        var j = Math.floor(Math.random() * (i + 1));
-        var swap = array[i];
-        array[i] = array[j];
-        array[j] = swap;
-      }
-      return array;
-    },
-
     'renderErrorMessage': function (errMessage) {
       alertMessageContainer.style = 'background-color: red;';
       alertMessageText.textContent = 'При обращении к серверу произошла ошибка: ' + errMessage;
